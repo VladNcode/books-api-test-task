@@ -38,6 +38,7 @@ const booksSchema = new mongoose.Schema({
   },
   authors: {
     type: [String],
+    required: [true, 'A book must have an author.'],
   },
 });
 

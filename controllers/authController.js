@@ -11,13 +11,14 @@ const signToken = id =>
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-  const { name, email } = user;
+  const { name, email, _id } = user;
 
   res.status(statusCode).json({
     status: 'success',
     token,
     data: {
       user: {
+        _id,
         name,
         email,
       },

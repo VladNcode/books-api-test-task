@@ -1,18 +1,15 @@
-require("dotenv").config({ path: "./config.env" });
-const mongoose = require("mongoose");
+require('dotenv').config({ path: './config.env' });
+const mongoose = require('mongoose');
 
-process.on("uncaughtException", (err) => {
+process.on('uncaughtException', err => {
   console.log(err.name, err.message);
-  console.log("UNCAUGHT EXCEPTION 💥 REJECTED REJECTED REJECTED");
+  console.log('UNCAUGHT EXCEPTION 💥 REJECTED REJECTED REJECTED');
   process.exit(1);
 });
 
-const app = require("./app");
+const app = require('./app');
 
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
+const DB = process.env.DATABASE;
 
 //* Connect to the database
 mongoose
@@ -21,7 +18,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("DB connection established");
+    console.log('DB connection established');
   });
 
 //* Start the server
@@ -31,17 +28,17 @@ const server = app.listen(port, (req, res) => {
   console.log(`Currently in: ${process.env.NODE_ENV}`);
 });
 
-process.on("unhandledRejection", (err) => {
+process.on('unhandledRejection', err => {
   console.log(err.name, err.message);
-  console.log("UNHANDLED REJECTION 💥 REJECTED REJECTED REJECTED");
+  console.log('UNHANDLED REJECTION 💥 REJECTED REJECTED REJECTED');
   server.close(() => {
     process.exit(1);
   });
 });
 
-process.on("SIGTERM", () => {
-  console.log("👋 SIGTERM RECEIVED. Shutting down gracefully");
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
   server.close(() => {
-    console.log("💥 Process terminated");
+    console.log('💥 Process terminated');
   });
 });

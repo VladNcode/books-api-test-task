@@ -39,14 +39,14 @@ app.use(mongoSanitize());
 //* Data sanitization againts XSS
 app.use(xss());
 
+app.use('/api/v1/books', bookRouter);
+app.use('/api/v1/users', userRouter);
 app.use('/', (req, res) => {
   res.status(200).json({
     message: 'You can check documentation to work with this app',
     link: 'https://documenter.getpostman.com/view/17965363/UVXjKbtn',
   });
 });
-app.use('/api/v1/books', bookRouter);
-app.use('/api/v1/users', userRouter);
 
 //* If code reaches this point, it will be executed
 app.all('*', (req, res, next) => {

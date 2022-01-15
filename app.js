@@ -1,5 +1,5 @@
 const express = require('express');
-// const morgan = require('morgan');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -17,9 +17,9 @@ const app = express();
 app.use(helmet());
 
 //* Development logging
-// if (process.env.NODE_ENV === 'development') {
-//   app.use(morgan('dev'));
-// }
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 //* Limit requests from same IP
 const limiter = rateLimit({
@@ -39,18 +39,21 @@ app.use(mongoSanitize());
 //* Data sanitization againts XSS
 app.use(xss());
 
-app.use('/api/v1/books', bookRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).json({
     message: 'You can check documentation to work with this app',
     link: 'https://documenter.getpostman.com/view/17965363/UVXjKbtn',
   });
 });
+app.use('/api/v1/books', bookRouter);
+app.use('/api/v1/users', userRouter);
 
 //* If code reaches this point, it will be executed
 app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server`,
+  });
 });
 
 app.use(globalErrorHandler);

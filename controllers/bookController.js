@@ -4,12 +4,7 @@ const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
 exports.getAllBooks = catchAsync(async (req, res, next) => {
-  let filter = {};
-  const features = new APIFeatures(Book.find(filter), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+  const features = new APIFeatures(Book.find(), req.query).filter().sort().limitFields().paginate();
 
   const books = await features.query;
 
